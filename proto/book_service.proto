@@ -1,0 +1,76 @@
+syntax = "proto3";
+package book;
+option go_package = "book-service_gc2p3/pb";
+
+message CreateBookRequest {
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  string publish_date = 4;
+  string status = 5;
+}
+
+message CreateBookResponse {
+  bool success = 1;
+  string id = 2;
+}
+
+message GetBookByIdRequest {
+  string id = 1;
+}
+
+message GetBookByIdResponse {
+  bool success = 1;
+  string title = 2;
+  string author = 3;
+  string publish_date = 4;
+  string status = 5;
+}
+
+message GetBookByTitleRequest {
+  string title = 1;
+}
+
+message GetBookByTitleResponse {
+  string id = 1;
+  string author = 2;
+  string publish_date = 3;
+  string status = 4;
+}
+
+message UpdateBookRequest {
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  string publish_date = 4;
+  string status = 5;
+}
+
+message UpdateBookResponse {
+  bool success = 1;
+}
+
+message DeleteBookRequest {
+  string id = 1;
+}
+
+message DeleteBookResponse {
+  bool success = 1;
+}
+
+message CheckBookRequest {
+  string id = 1;
+}
+
+message CheckBookResponse {
+  bool exist = 1;
+}
+
+service BookService {
+  rpc Create(CreateBookRequest) returns (CreateBookResponse);
+  rpc GetBookById(GetBookByIdRequest) returns (GetBookByIdResponse);
+  rpc GetBookByTitle(GetBookByTitleRequest) returns (GetBookByTitleResponse);
+  rpc Update(UpdateBookRequest) returns (UpdateBookResponse);
+  rpc Delete(DeleteBookRequest) returns (DeleteBookResponse);
+  rpc Check(CheckBookRequest) returns (CheckBookResponse);
+}
