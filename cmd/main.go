@@ -19,7 +19,7 @@ func main() {
 	bookServer := service.NewBookService(config.DB)
 	pb.RegisterBookServiceServer(grpcServer, bookServer)
 
-	gRPCPort := config.Viper.GetString("GRPC_PORT")
+	gRPCPort := config.Viper.GetString("PORT")
 
 	listen, err := net.Listen("tcp", fmt.Sprintf(":%s", gRPCPort))
 	if err != nil {
