@@ -3,6 +3,7 @@ package service
 import (
 	"book-service_gc2p3/entity"
 	"book-service_gc2p3/pb"
+	"book-service_gc2p3/utils"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -25,7 +26,7 @@ func (s *BookService) Create(ctx context.Context, req *pb.CreateBookRequest) (*p
 	status := req.GetStatus()
 
 	// Insert data to database
-	coll := s.db.Database("book_db").Collection("books")
+	coll := utils.GetCollection(s.db, "books")
 	book := entity.Book{
 		Title:       title,
 		Author:      author,
@@ -54,7 +55,7 @@ func (s *BookService) GetBookById(ctx context.Context, req *pb.GetBookByIdReques
 
 	// Find book by id
 	bookIdObj, _ := primitive.ObjectIDFromHex(bookId)
-	coll := s.db.Database("book_db").Collection("books")
+	coll := utils.GetCollection(s.db, "books")
 	var book entity.Book
 
 	err := coll.FindOne(ctx, bson.M{"_id": bookIdObj}).Decode(&book)
@@ -83,7 +84,7 @@ func (s *BookService) GetBookByTitle(ctx context.Context, req *pb.GetBookByTitle
 	title := req.GetTitle()
 
 	// Find book by title
-	coll := s.db.Database("book_db").Collection("books")
+	coll := utils.GetCollection(s.db, "books")
 	var book entity.Book
 	err := coll.FindOne(ctx, bson.M{"title": title}).Decode(&book)
 	if err != nil {
@@ -112,7 +113,7 @@ func (s *BookService) Update(ctx context.Context, req *pb.UpdateBookRequest) (*p
 	// Check book by id
 
 	// Update book by id
-	coll := s.db.Database("book_db").Collection("books")
+	coll := utils.GetCollection(s.db, "books")
 	bookIdObj, _ := primitive.ObjectIDFromHex(bookId)
 	_, err := coll.UpdateOne(ctx, bson.M{"_id": bookIdObj}, bson.M{"$set": bson.M{
 		"title":        title,
@@ -138,7 +139,7 @@ func (s *BookService) Delete(ctx context.Context, req *pb.DeleteBookRequest) (*p
 
 	// Delete book by id
 	bookIdObj, _ := primitive.ObjectIDFromHex(bookId)
-	coll := s.db.Database("book_db").Collection("books")
+	coll := utils.GetCollection(s.db, "books")
 	_, err := coll.DeleteOne(ctx, bson.M{"_id": bookIdObj})
 	if err != nil {
 		return nil, err
